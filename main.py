@@ -26,9 +26,12 @@ lastExpr = ""
 def lookData():
     global evalLinSpace
     infu.extract_data()
-    if infu.expression!="" and len(infu.expression)>0:
-        lastExpr=infu.expression
-        infu.expression=""
+    if infu.num!="" and len(infu.num)>0:
+        lastExpr=infu.gStatic+"*"+ "("+ "(" + infu.num + ")" + "/" + "(" + infu.den +")" + ")"
+        infu.num=""
+        infu.den=""
+        infu.gStatic=""
+        lastExpr=lastExpr.replace('s','j*w')
         evalLinSpace=(eval(lastExpr, {"w": graph.x*2*cmath.pi, "f": graph.x, "np": np}))
 
         #calculate Module and Phase:
