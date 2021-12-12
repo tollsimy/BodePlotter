@@ -4,11 +4,11 @@ import numpy as np
 import graph as graph
 import cmath
 from os import path
-from os import name
+from platform import system
 
 def rcpath(rel_path):
     iconPath=path.dirname(path.realpath(__file__))+"\\" + rel_path
-    if name == 'nt':                #if OS=Windows replace slashes
+    if system == "Windows":                #if OS=Windows replace slashes
         iconPath=iconPath.replace("\\","/")
     return iconPath
 

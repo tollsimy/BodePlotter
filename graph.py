@@ -4,9 +4,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.widgets import TextBox
 from matplotlib.widgets import Button
+from matplotlib import use
+from platform import system
 
 if __name__ == "__main__":
     print("This script is a module and can't run on it's own, start main.py instead!")
+
+if(system()=="Darwin"):
+    use('tkAgg')
 
 def roundRange(valueMin,valueMax,axis):
 
