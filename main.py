@@ -27,7 +27,7 @@ def lookData():
     global evalLinSpace
     infu.extract_data()
     if infu.num!="" and len(infu.num)>0:
-        lastExpr=infu.gStatic+"*"+ "("+ "(" + infu.num + ")" + "/" + "(" + infu.den +")" + ")"
+        lastExpr=infu.gStatic+"*"+ "("+ "(" + infu.num + ")" + "/" + "(" + infu.den +")" + ")"      #Ks*((Num)/(Den))
         infu.num=""
         infu.den=""
         infu.gStatic=""

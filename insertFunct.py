@@ -91,7 +91,7 @@ def keybind (event):
         try:
             v = int(v)
         except ValueError:
-            if v!="\x08" and v!="" and v!="/" and v!="*" and v!="j" and v!="w" and v!="f" and v!="^" and v!="(" and v!=")" and v!="+" and v!="-" and v!="s" and v!=".":
+            if v!="\x08" and v!="" and v!="/" and v!="*" and v!="j" and v!="w" and v!="f" and v!="(" and v!=")" and v!="+" and v!="-" and v!="s" and v!=".":
                 return "break"
 
 funcWindow=None     #da fixare, da problemi se non viene mai istanziata la seconda finestra, prova a eliminarla anche se non esiste: AttributeError: 'NoneType' object has no attribute 'destroy'
