@@ -52,5 +52,5 @@ def lookData():
 infu.plot()
 graph.autoScale(0)
 infu.window.after(50, lookData)
-infu.window.iconbitmap(rcpath('icon.ico'))
+infu.window.iconbitmap(rcpath('/images/icon.ico'))
 infu.window.mainloop()

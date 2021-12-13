@@ -68,6 +68,7 @@ defaultYaxisMinPh = "-180"
 defaultYaxisMaxPh = "180"
 maxStrLenghtX=10
 maxStrLenghtYMod=5
+maxStrLenghtYPh=5
 
 x = x = np.logspace(np.log10(XMin),np.log10(XMax),num=resolution)       #X Axis space
 modulus = dmf.mod                                                       #modulus space
@@ -96,71 +97,74 @@ axPhP, = axPh.plot(x, phase, linewidth=2.0)
 
 #set x axis low limit
 def setLowXLim(lowLim):
-    (currLow,currHigh) = axMod.get_xlim()
-    #min cannot be higher than max an viceversa
-    if(float(lowLim)<currHigh):
-        axMod.set_xlim(float(lowLim),currHigh)
-        axPh.set_xlim(float(lowLim),currHigh)
-    else:
-        llx_text_box.set_val(currLow)
-    plt.draw()
+    if(len(lowLim)!=0 and (float(lowLim)>0)):
+        (currLow,currHigh) = axMod.get_xlim()
+        #min cannot be higher than max an viceversa
+        if(float(lowLim)<currHigh):
+            axMod.set_xlim(float(lowLim),currHigh)
+            axPh.set_xlim(float(lowLim),currHigh)
+        else:
+            llx_text_box.set_val(currLow)
+        plt.draw()
 
 #set x axis high limit
 def setHighXLim(highLim):
-    (currLow,currHigh) = axMod.get_xlim()
-    if(float(highLim)>currLow):
-        axMod.set_xlim(currLow,float(highLim))
-        axPh.set_xlim(currLow,float(highLim))
-    else:
-        hlx_text_box.set_val(currHigh)
-    plt.draw()
+    if(len(highLim)!=0 and (float(highLim)>0)):
+        (currLow,currHigh) = axMod.get_xlim()
+        #min cannot be higher than max an viceversa
+        if(float(highLim)>currLow):
+            axMod.set_xlim(currLow,float(highLim))
+            axPh.set_xlim(currLow,float(highLim))
+        else:
+            hlx_text_box.set_val(currHigh)
+        plt.draw()
 
 #-------------Module---------------------------------
 
 #set y Module axis low limit
 def setLowYLimMod(lowLim):
-    (currLow,currHigh) = axMod.get_ylim()
-    if(float(lowLim)<currHigh):
-        axMod.set_ylim(float(lowLim),currHigh)
-    else:
-        llyMod_text_box.set_val(currLow)
-    plt.draw()
+    if(len(lowLim)!=0):
+        (currLow,currHigh) = axMod.get_ylim()
+        #min cannot be lower than max an viceversa
+        if(float(lowLim)<currHigh):
+            axMod.set_ylim(float(lowLim),currHigh)
+        else:
+            llyMod_text_box.set_val(currLow)
+        plt.draw()
 
 #set y Module axis high limit
 def setHighYLimMod(highLim):
-    (currLow,currHigh) = axMod.get_ylim()
-    if(float(highLim)>currLow):
-        axMod.set_ylim(currLow,float(highLim))
-    else:
-        hlyMod_text_box.set_val(currHigh)
-    plt.draw()
+    if(len(highLim)!=0):
+        (currLow,currHigh) = axMod.get_ylim()
+        #min cannot be higher than max an viceversa
+        if(float(highLim)>currLow):
+            axMod.set_ylim(currLow,float(highLim))
+        else:
+            hlyMod_text_box.set_val(currHigh)
+        plt.draw()
 
 #-----------------------------phase
 
 #set y Phase axis low limit
 def setLowYLimPh(lowLim):
-    if(lowLim<=defaultYaxisMinPh):
+    if(len(lowLim)!=0):
         (currLow,currHigh) = axPh.get_ylim()
+        #min cannot be lower than max an viceversa
         if(float(lowLim)<currHigh):
             axPh.set_ylim(float(lowLim),currHigh)
         else:
             llyPh_text_box.set_val(currLow)
         plt.draw()
-    else:
-        llyPh_text_box.set_val(defaultYaxisMinPh)
-        plt.draw()
 
 #set y Phase axis high limit
 def setHighYLimPh(highLim):
-    if(highLim<=defaultYaxisMaxPh):
+    if(len(highLim)!=0):
         (currLow,currHigh) = axPh.get_ylim()
+        #min cannot be higher than max an viceversa
         if(float(highLim)>currLow):
             axPh.set_ylim(currLow,float(highLim))
         else:
             hlyPh_text_box.set_val(currHigh)
-        plt.draw()
-    else:
-        hlyPh_text_box.set_val(defaultYaxisMaxPh)
         plt.draw()
 #--------------------------------------
 
@@ -191,114 +195,55 @@ def autoScale(dummy):
     hlyPh_text_box.set_val(phaseMax)
     plt.draw()
 
+
 #validate input
-isEmptyXL=0
 def validateInputXL(text):
-    global isEmptyXL
-    if(is_number(text) and isEmptyXL!=1):
-        isEmptyXL=0
-        llx_text_box.text_disp.set_color('black')
-        if(len(text)>maxStrLenghtX):
-            text=text[:-1]  #cut last number, the one exceeding
-            llx_text_box.set_val(text)
-    else:
-        if(len(text)!=0):
-            llx_text_box.set_val("NaN") #set a non number so it returns to this point unless you write a number
-            llx_text_box.text_disp.set_color('red')
-            isEmptyXL=0
-        else:
-            llx_text_box.set_val(str(XMin))
-            isEmptyXL=1
+    if(len(text)!=0):
+        if(len(text)>maxStrLenghtX or not is_number(text[-1])):
+            if(text[-1]!="."):
+                text=text[:-1]  #cut last number, the one exceeding
+                if(is_number(text)):
+                    llx_text_box.set_val(text)
 
-isEmptyModYL=0
-def validateInputModYL(text):
-    global isEmptyModYL
-    if(is_number(text) and isEmptyModYL!=1):
-        isEmptyModYL=0
-        llyMod_text_box.text_disp.set_color('black')
-        if(len(text)>maxStrLenghtYMod+1):
-            text=text[:-1]  #cut last number, the one exceeding
-            llyMod_text_box.set_val(text)
-    else:
-        if(len(text)!=0):
-            llyMod_text_box.set_val("NaN") #set a non number so it returns to this point unless you write a number
-            llyMod_text_box.text_disp.set_color('red')
-            isEmptyModYL=0
-        else:
-            llyMod_text_box.set_val(str(YMinMod))
-            isEmptyModYL=1
-
-isEmptyXH=0
 def validateInputXH(text):
-    global isEmptyXH
-    if(is_number(text) and isEmptyXH!=1):
-        isEmptyXH=0
-        hlx_text_box.text_disp.set_color('black')
-        if(len(text)>maxStrLenghtX):
-            text=text[:-1]  #cut last number, the one exceeding
-            hlx_text_box.set_val(text)
-    else:
-        if(len(text)!=0):
-            hlx_text_box.set_val("NaN") #set a non number so it returns to this point unless you write a number
-            hlx_text_box.text_disp.set_color('red')
-            isEmptyXH=0
-        else:
-            hlx_text_box.set_val(str(XMax))
-            isEmptyXH=1
+    if(len(text)!=0):
+        if(len(text)>maxStrLenghtX or not is_number(text[-1])):
+            if(text[-1]!="."):
+                text=text[:-1]  #cut last number, the one exceeding
+                if(is_number(text)):
+                    hlx_text_box.set_val(text)
 
-isEmptyModYH=0
+def validateInputModYL(text):
+    if(len(text)!=0):
+        if(len(text)>maxStrLenghtYMod or not is_number(text[-1])):
+            if(text[-1]!="." or text[-1]!="-"):
+                text=text[:-1]  #cut last number, the one exceeding
+                if(is_number(text)):
+                    llyMod_text_box.set_val(text)
+
 def validateInputModYH(text):
-    global isEmptyModYH
-    if(is_number(text) and isEmptyModYH!=1):
-        isEmptyModYH=0
-        hlyMod_text_box.text_disp.set_color('black')
-        if(len(text)>maxStrLenghtYMod):
-            text=text[:-1]  #cut last number, the one exceeding
-            hlyMod_text_box.set_val(text)
-    else:
-        if(len(text)!=0):
-            hlyMod_text_box.set_val("NaN") #set a non number so it returns to this point unless you write a number
-            hlyMod_text_box.text_disp.set_color('red')
-            isEmptyModYH=0
-        else:
-            hlyMod_text_box.set_val(str(YMaxMod))
-            isEmptyModYH=1
+    if(len(text)!=0):
+        if(len(text)>maxStrLenghtYMod or not is_number(text[-1])):
+            if(text[-1]!="." or text[-1]!="-"):
+                text=text[:-1]  #cut last number, the one exceeding
+                if(is_number(text)):
+                    hlyMod_text_box.set_val(text)
 
-isEmptyPhYH=0
-def validateInputPhYH(text):
-    global isEmptyPhYH
-    if(is_number(text) and isEmptyPhYH!=1):
-        isEmptyPhYH=0
-        hlyPh_text_box.text_disp.set_color('black')
-        if(len(text)>maxStrLenghtYMod):
-            text=text[:-1]  #cut last number, the one exceeding
-            hlyPh_text_box.set_val(text)
-    else:
-        if(len(text)!=0):
-            hlyPh_text_box.set_val("NaN") #set a non number so it returns to this point unless you write a number
-            hlyPh_text_box.text_disp.set_color('red')
-            isEmptyPhYH=0
-        else:
-            hlyPh_text_box.set_val(str(YMaxPh))
-            isEmptyPhYH=1
-
-isEmptyPhYL=0
 def validateInputPhYL(text):
-    global isEmptyPhYL
-    if(is_number(text) and isEmptyPhYL!=1):
-        isEmptyPhYL=0
-        llyPh_text_box.text_disp.set_color('black')
-        if(len(text)>maxStrLenghtYMod+1):
-            text=text[:-1]  #cut last number, the one exceeding
-            llyPh_text_box.set_val(text)
-    else:
-        if(len(text)!=0):
-            llyPh_text_box.set_val("NaN") #set a non number so it returns to this point unless you write a number
-            llyPh_text_box.text_disp.set_color('red')
-            isEmptyPhYL=0
-        else:
-            llyPh_text_box.set_val(str(YMinPh))
-            isEmptyPhYL=1
+    if(len(text)!=0):
+        if(len(text)>maxStrLenghtYPh or not is_number(text[-1])):
+            if(text[-1]!="." or text[-1]!="-"):
+                text=text[:-1]  #cut last number, the one exceeding
+                if(is_number(text)):
+                    llyPh_text_box.set_val(text)
+
+def validateInputPhYH(text):
+    if(len(text)!=0):
+        if(len(text)>maxStrLenghtYPh or not is_number(text[-1])):
+            if(text[-1]!="." or text[-1]!="-"):
+                text=text[:-1]  #cut last number, the one exceeding
+                if(is_number(text)):
+                    hlyPh_text_box.set_val(text)
 
 #low x limit TextBox
 axbox = fig.add_axes([0.25, 0.05, 0.15, 0.05])
@@ -345,8 +290,8 @@ hlyPh_text_box.set_val(defaultYaxisMaxPh)  # Trigger `submit` with the initial s
 
 #---------------------------------
 
-llx_text_box.on_text_change(validateInputXL)
-hlx_text_box.on_text_change(validateInputXH)
+llx_text_box.on_text_change(validateInputXL)    # there is no ways to use only one validateInput function because
+hlx_text_box.on_text_change(validateInputXH)    # can't pass textBox and textbox.text as argument to validate function
 llyMod_text_box.on_text_change(validateInputModYL)
 hlyMod_text_box.on_text_change(validateInputModYH)
 llyPh_text_box.on_text_change(validateInputPhYL)
