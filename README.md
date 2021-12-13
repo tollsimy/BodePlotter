@@ -4,10 +4,16 @@ Don't judge my code, i'm not @notfilippo (FR-ATM).
 
 ## How to install BodePlotter
 Tested on Python 3.8.10.<br/>
-Simply move to the BodePlotter directory and lauch:
+If you are running Windows simply move to the BodePlotter directory and lauch:
 
 ```
 pip install -r requirements.txt
+```
+
+For MacOS you also need to launch:
+
+```
+brew install python-tk
 ```
 
 ## How to start the plotter
