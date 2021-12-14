@@ -1,5 +1,5 @@
 # BodePlotter
-Simple "electrician's made" Python Bode Plotter, useful to fast check Magnitude and Phase of a transfer function. <br/> 
+Simple "electrician's made" (joking) Python Bode Plotter, useful to fast check Magnitude and Phase of a transfer function. <br/> 
 Don't judge my code, i'm not @notfilippo (FR-ATM).
 
 ## How to install BodePlotter
