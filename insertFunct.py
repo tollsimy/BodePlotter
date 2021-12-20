@@ -90,22 +90,19 @@ def keybind (event):
         v = event.char
         try:
             v = int(v)
-        except ValueError:
-            if v!="\x08" and v!="" and v!="/" and v!="*" and v!="j" and v!="w" and v!="f" and v!="(" and v!=")" and v!="+" and v!="-" and v!="s" and v!=".":
+        except ValueError:      #allow ascii char for ctrl+c, ctrl+v, ctrl+x, operands and variables
+            if v!="\x08" and v!="\x03" and v!="\x16" and v!="\x18" and v!="" and v!="/" and v!="*" and v!="j" and v!="w" and v!="f" and v!="(" and v!=")" and v!="+" and v!="-" and v!="s" and v!=".":
                 return "break"
 
-funcWindow=None     #da fixare, da problemi se non viene mai istanziata la seconda finestra, prova a eliminarla anche se non esiste: AttributeError: 'NoneType' object has no attribute 'destroy'
+funcWindow=None
 def openFuncWindow():
 
-    # Toplevel object which will
-    # be treated as a new window
     global funcWindow
     if(funcWindow==None):
         funcWindow = Toplevel()
-        # sets the title of the
-        # Toplevel widget
+
         funcWindow.title("Insert function")
-        # sets the geometry of toplevel
+
         funcWindow.geometry("500x400")
         funcWindow.iconbitmap(rcpath('/images/icon.ico'))
     
@@ -113,9 +110,8 @@ def openFuncWindow():
         topFrame = Frame(funcWindow)
         topFrame.pack(side="top",padx=10, pady=0)
         bottomFrame = Frame(funcWindow)
-        bottomFrame.pack(side="bottom",padx=0, anchor=N,pady=50)
+        bottomFrame.pack(side="bottom",padx=0, anchor=N,pady=20)
 
-        # A Label widget to show in toplevel
         label=Label(topFrame, height=1, text="Insert new function to plot:")
         label.pack(side="top",pady=25)
         font = Font(size=16, weight="bold")
@@ -139,6 +135,7 @@ def openFuncWindow():
         global text_boxNum
         global text_boxDen
         global text_boxGStatic
+        global text_stringDebug
         
         text_boxGStatic = Text( master=topFrame,
                         height=1,
@@ -176,6 +173,15 @@ def openFuncWindow():
         text_boxDen.insert('end', functStringDen)
         text_boxDen.pack(side="bottom",pady=10)
         text_boxDen.bind('<KeyPress>', keybind)
+
+        text_stringDebug = Text( master=bottomFrame,
+                        height=1,
+                        width=30,
+                        wrap='word'
+                        )
+        text_stringDebug.insert('end',"Valid expression")
+        text_stringDebug.pack(side="top",pady=20)
+        text_stringDebug.configure(state="disabled")
 
         funcWindow.protocol("WM_DELETE_WINDOW", _quitFunc)
     else:

@@ -22,17 +22,36 @@ def getPhase(complexLinSpace):
     phaseRadian=np.vectorize(getPhaseElem)
     return phaseRadian(complexLinSpace)
 
-lastExpr = ""
+expr = ""
+lastExpr="1*((1)/(1+1j*f))"
 def lookData():
     global evalLinSpace
+    global lastExpr
     infu.extract_data()
     if infu.num!="" and len(infu.num)>0:
-        lastExpr=infu.gStatic+"*"+ "("+ "(" + infu.num + ")" + "/" + "(" + infu.den +")" + ")"      #Ks*((Num)/(Den))
+        expr=infu.gStatic+"*"+ "("+ "(" + infu.num + ")" + "/" + "(" + infu.den +")" + ")"      #Ks*((Num)/(Den))
         infu.num=""
         infu.den=""
         infu.gStatic=""
-        lastExpr=lastExpr.replace('s','j*w')
-        evalLinSpace=(eval(lastExpr, {"w": graph.x*2*cmath.pi, "f": graph.x, "np": np}))
+        expr=expr.replace('s','j*w')
+        try:
+            evalLinSpace=(eval(expr, {"w": graph.x*2*cmath.pi, "f": graph.x, "np": np}))
+            lastExpr=expr
+            infu.text_stringDebug.configure(state="normal")
+            infu.text_stringDebug.delete("1.0", "end")
+            infu.text_stringDebug.insert("end", "Valid expression")
+            infu.text_stringDebug.configure(state="disabled")
+        except Exception as err:
+            err=str(err)
+            if(err=="unmatched ')' (<string>, line 1)") or err=="invalid syntax (<string>, line 1)":
+                err=str(err)[:-18]         #cut "(<string>, line 1)"
+            print("Expression not valid: " + err)
+            infu.text_stringDebug.configure(state="normal")
+            infu.text_stringDebug.delete("1.0", "end")
+            infu.text_stringDebug.insert("end", err)
+            infu.text_stringDebug.configure(state="disabled")
+            infu.funcWindow.deiconify()
+            evalLinSpace=(eval(lastExpr, {"w": graph.x*2*cmath.pi, "f": graph.x, "np": np}))
 
         #calculate Module and Phase:
         modulus=getModulus(evalLinSpace)
